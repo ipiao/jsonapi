@@ -40,7 +40,13 @@ type Resource struct {
 
 // TransModelToData transform model to data
 func TransModelToData(model interface{}) interface{} {
+	if model == nil {
+		return nil
+	}
 	v := reflect.ValueOf(model)
+	if v.IsValid() {
+		return nil
+	}
 	if v.Kind() == reflect.Ptr || v.Kind() == reflect.Interface {
 		v = v.Elem()
 	}
