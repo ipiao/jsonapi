@@ -97,6 +97,24 @@ func getIDStr(v reflect.Value, idloc *idLoc) string {
 	return ""
 }
 
+// GetID to export
+func GetID(i interface{}) int64 {
+	v := reflect.Indirect(reflect.ValueOf(i))
+	t := v.Type()
+	return getID(v, getIDLoc(t))
+}
+
+func getID(v reflect.Value, idloc *idLoc) int64 {
+	v = reflect.Indirect(v)
+	if idloc.idType == typeInvalid {
+	} else if idloc.idType == typeInt {
+		return v.Field(idloc.index).Int()
+	} else if idloc.idType == typeAnnoy {
+		return getID(v.Field(idloc.index), getIDLoc(v.Field(idloc.index).Type()))
+	}
+	return 0
+}
+
 // GetType to export
 func GetType(i interface{}) string {
 	t := reflect.TypeOf(i)
