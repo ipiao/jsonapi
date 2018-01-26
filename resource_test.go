@@ -100,17 +100,30 @@ func TestSyncGetType(t *testing.T) {
 }
 
 func TestTransModelToData(t *testing.T) {
-	t.Log(transModelToData(User{ID: 212312, Name: "tom"}))
-	t.Log(transModelToData(&User{ID: 212312, Name: "tom"}))
-	t.Log(transModelToData([]User{User{ID: 212312, Name: "tom"}}))
-	t.Log(transModelToData([]*User{&User{ID: 212312, Name: "tom"}}))
-	t.Log(transModelToData(interface{}(&User{ID: 212312, Name: "tom"})))
-	t.Log(transModelToData(interface{}(User{ID: 212312, Name: "tom"})))
-	t.Log(transModelToData(map[string]User{"a": User{ID: 212312, Name: "tom"}}))
-	t.Log(transModelToData(User2{Id: "212312"}))
-	t.Log(transModelToData(User5{}))
+	t.Log(TransModelToData(User{ID: 212312, Name: "tom"}))
+	t.Log(TransModelToData(&User{ID: 212312, Name: "tom"}))
+	t.Log(TransModelToData([]User{User{ID: 212312, Name: "tom"}}))
+	t.Log(TransModelToData([]*User{&User{ID: 212312, Name: "tom"}}))
+	t.Log(TransModelToData(interface{}(&User{ID: 212312, Name: "tom"})))
+	t.Log(TransModelToData(interface{}(User{ID: 212312, Name: "tom"})))
+	t.Log(TransModelToData(map[string]User{"a": User{ID: 212312, Name: "tom"}}))
+	t.Log(TransModelToData(User2{Id: "212312"}))
+	t.Log(TransModelToData(User5{}))
 
-	t.Log(transModelToData(map[string]interface{}{"a": User{ID: 212312, Name: "tom"}}))
+	t.Log(TransModelToData(map[string]interface{}{"a": User{ID: 212312, Name: "tom"}}))
 	t.Log(idIndexMap)
 	t.Log(typeMap)
+}
+
+func TestTransNil(t *testing.T) {
+	t.Log(TransModelToData(nil))
+	var u = User{}
+	t.Log(TransModelToData(u))
+	var up *User = nil
+	t.Log(TransModelToData(up))
+	t.Log(TransModelToData(interface{}(u)))
+	t.Log(TransModelToData(interface{}(up)))
+	t.Log(TransModelToData(interface{}(nil)))
+
+	t.Log(TransModelToData(1))
 }

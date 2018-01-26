@@ -44,29 +44,31 @@ func TransModelToData(model interface{}) interface{} {
 		return nil
 	}
 	v := reflect.ValueOf(model)
-	if v.IsValid() {
-		return nil
-	}
+	t := reflect.TypeOf(model)
 	if v.Kind() == reflect.Ptr || v.Kind() == reflect.Interface {
 		v = v.Elem()
+		t = t.Elem()
 	}
-	t := v.Type()
-	idIndx := getIDLoc(t)
-	typeName := getType(t)
 	switch v.Kind() {
 	case reflect.Array, reflect.Slice:
+		idIndx := getIDLoc(t)
+		typeName := getType(t)
 		var attributes = []*Resource{}
 		for i := 0; i < v.Len(); i++ {
 			attributes = append(attributes, transModelToResourceWith2(v.Index(i), idIndx, typeName))
 		}
 		return attributes
 	case reflect.Map:
+		idIndx := getIDLoc(t)
+		typeName := getType(t)
 		var attributes = map[interface{}]*Resource{}
 		for _, i := range v.MapKeys() {
 			attributes[i.Interface()] = transModelToResourceWith2(v.MapIndex(i), idIndx, typeName)
 		}
 		return attributes
 	case reflect.Struct:
+		idIndx := getIDLoc(t)
+		typeName := getType(t)
 		return transModelToResourceWith2(v, idIndx, typeName)
 	}
 	return model
